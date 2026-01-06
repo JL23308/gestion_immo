@@ -1,0 +1,16 @@
+meta {
+  name: list
+  type: http
+  seq: 2
+}
+
+get {
+  url: http://localhost:8765/api/v1/apartments
+  body: none
+  auth: inherit
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

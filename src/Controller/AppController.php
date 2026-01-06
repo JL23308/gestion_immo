@@ -41,7 +41,9 @@ class AppController extends Controller
     {
         parent::initialize();
 
-        $this->loadComponent('Flash');
+
+        $this->response = $this->response->withType('application/json');
+        $this->viewBuilder()->setClassName('Json');
 
         /*
          * Enable the following component for recommended CakePHP form protection settings.
