@@ -51,7 +51,29 @@ return function (RouteBuilder $routes): void {
 
     $routes->scope('/api/v1', function (RouteBuilder $builder): void {
         $builder->setExtensions(['json']);
+        
+        // Users routes - only login and register
+        $builder->connect('/users/login', [
+            'controller' => 'Users',
+            'action' => 'login',
+        ])->setMethods(['POST']);
+
+        $builder->connect('/users/register', [
+            'controller' => 'Users',
+            'action' => 'register',
+        ])->setMethods(['POST']);
+
+        // Apartments routes
         $builder->resources('Apartments');
+
+        // Leases routes
+        $builder->resources('Leases');
+
+        // Nested routes for relationships
+        $builder->connect('/users/:user_id/leases', [
+            'controller' => 'Leases',
+            'action' => 'index',
+        ])->setPass(['user_id']);
     });
 
     /*
@@ -69,4 +91,9 @@ return function (RouteBuilder $routes): void {
      * });
      * ```
      */
+    
+    $routes->scope('/api/v1/docs/swagger', function (RouteBuilder $builder): void {
+        $builder->connect('/', ['plugin' => 'SwaggerBake', 'controller' => 'Swagger', 'action' => 'index']);
+        $builder->connect('/{action}/*', ['plugin' => 'SwaggerBake', 'controller' => 'Swagger']);
+    });
 };

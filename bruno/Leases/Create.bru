@@ -1,0 +1,23 @@
+meta {
+  name: Create
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{base_url}}/api/v1/leases
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "apartment_id": 2,
+    "user_id": 1,
+    "start_date": "2026-03-01",
+    "end_date": "2027-03-01",
+    "deposit": 3000.00,
+    "status": "active",
+    "notes": "Bail de 12 mois renouvelable"
+  }
+}

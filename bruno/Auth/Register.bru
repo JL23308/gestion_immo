@@ -1,0 +1,51 @@
+meta {
+  name: Register
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/users/register
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "marie.dupont@example.com",
+    "password": "SecurePass123!",
+    "first_name": "Marie",
+    "last_name": "Dupont",
+    "phone": "+33612345678"
+  }
+}
+
+tests {
+  test("Response is valid", function() {
+    // Accept both 201 (created) and 400 (already exists) for idempotent tests
+    expect([201, 400]).to.include(res.status);
+  });
+  
+  test("Response has correct structure", function() {
+    expect(res.body.response).to.be.an('object');
+    expect(res.body.response.message).to.exist;
+  });
+  
+  test("If created, user data is present", function() {
+    if (res.status === 201) {
+      expect(res.body.response.success).to.equal(true);
+      expect(res.body.response.data).to.be.an('object');
+      expect(res.body.response.data.email).to.equal("marie.dupont@example.com");
+    }
+  });
+  
+  test("Metadata is present", function() {
+    expect(res.body.metadata).to.be.an('object');
+    expect(res.body.metadata.execution_time).to.exist;
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

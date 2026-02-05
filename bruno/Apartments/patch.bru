@@ -1,0 +1,27 @@
+meta {
+  name: patch
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{base_url}}/api/v1/apartments/1
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
+
+body:json {
+  {
+    "rent": 1850.00,
+    "booked": true
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

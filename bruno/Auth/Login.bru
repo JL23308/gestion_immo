@@ -1,0 +1,53 @@
+meta {
+  name: Login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{base_url}}/api/v1/users/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "marie.dupont@example.com",
+    "password": "SecurePass123!"
+  }
+}
+
+script:post-response {
+  if (res.body.response && res.body.response.success && res.body.response.data.token) {
+    bru.setEnvVar("auth_token", res.body.response.data.token);
+  }
+}
+
+tests {
+  test("Status code is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response has success true", function() {
+    expect(res.body.response.success).to.equal(true);
+  });
+  
+  test("Token is present", function() {
+    expect(res.body.response.data.token).to.exist;
+    expect(res.body.response.data.token).to.be.a('string');
+  });
+  
+  test("User info is present", function() {
+    expect(res.body.response.data.user).to.be.an('object');
+    expect(res.body.response.data.user.email).to.equal("marie.dupont@example.com");
+  });
+  
+  test("Response has code 200", function() {
+    expect(res.body.response.code).to.equal(200);
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

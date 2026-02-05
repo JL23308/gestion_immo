@@ -1,0 +1,66 @@
+meta {
+  name: create
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{base_url}}/api/v1/apartments
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{auth_token}}
+}
+
+body:json {
+  {
+    "address": "25 Rue de la Paix, 75002 Paris",
+    "rent": 1800.00,
+    "size": 85,
+    "nb_rooms": 3,
+    "nb_bathrooms": 2,
+    "booked": false,
+    "energy_class": "B",
+    "description": "Appartement lumineux avec balcon, proche métro Opéra"
+  }
+}
+
+script:post-response {
+  if (res.body.response && res.body.response.success && res.body.response.data.id) {
+    bru.setEnvVar("apartment_id", res.body.response.data.id);
+  }
+}
+
+tests {
+  test("Response is valid", function() {
+    expect([200, 201, 400]).to.include(res.status);
+  });
+  
+  test("Response has correct structure", function() {
+    expect(res.body.response).to.be.an('object');
+  });
+  
+  test("If created, apartment data is present", function() {
+    if (res.status === 201) {
+      expect(res.body.response.success).to.equal(true);
+      expect(res.body.response.data).to.be.an('object');
+      expect(res.body.response.data.id).to.exist;
+      expect(res.body.response.data.rent).to.equal(1800);
+      expect(res.body.response.data.size).to.equal(85);
+    }
+  });
+  
+  test("Rent and size are numbers when present", function() {
+    if (res.body.response.data) {
+      expect(res.body.response.data.rent).to.be.a('number');
+      expect(res.body.response.data.size).to.be.a('number');
+    }
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

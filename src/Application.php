@@ -16,17 +16,21 @@ declare(strict_types=1);
  */
 namespace App;
 
+use Authentication\AuthenticationService;
+use Authentication\AuthenticationServiceInterface;
+use Authentication\AuthenticationServiceProviderInterface;
+use Authentication\Middleware\AuthenticationMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\ContainerInterface;
 use Cake\Datasource\FactoryLocator;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Http\Middleware\BodyParserMiddleware;
-use Cake\Http\Middleware\CsrfProtectionMiddleware;
 use Cake\Http\MiddlewareQueue;
 use Cake\ORM\Locator\TableLocator;
 use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * Application setup class.
@@ -34,9 +38,9 @@ use Cake\Routing\Middleware\RoutingMiddleware;
  * This defines the bootstrapping logic and middleware layers you
  * want to use in your application.
  *
- * @extends \Cake\Http\BaseApplication<\App\Application>
+ * @extends \Cake\Http\BaseApplication
  */
-class Application extends BaseApplication
+class Application extends BaseApplication implements AuthenticationServiceProviderInterface
 {
     /**
      * Load all the application configuration and bootstrap logic.
@@ -53,7 +57,7 @@ class Application extends BaseApplication
         } else {
             FactoryLocator::add(
                 'Table',
-                (new TableLocator())->allowFallbackClass(false)
+                (new TableLocator())->allowFallbackClass(false),
             );
         }
 
@@ -95,7 +99,10 @@ class Application extends BaseApplication
             // Parse various types of encoded request bodies so that they are
             // available as array through $request->getData()
             // https://book.cakephp.org/4/en/controllers/middleware.html#body-parser-middleware
-            ->add(new BodyParserMiddleware());
+            ->add(new BodyParserMiddleware())
+
+            // Add Authentication Middleware after BodyParser
+            ->add(new AuthenticationMiddleware($this));
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
@@ -129,5 +136,53 @@ class Application extends BaseApplication
         $this->addPlugin('Migrations');
 
         // Load more plugins here
+    }
+
+    /**
+     * Returns a service provider instance.
+     *
+     * @param \Psr\Http\Message\ServerRequestInterface $request Request
+     * @return \Authentication\AuthenticationServiceInterface
+     */
+    public function getAuthenticationService(ServerRequestInterface $request): AuthenticationServiceInterface
+    {
+        $service = new AuthenticationService();
+
+        // Define where users should be redirected to when they are not authenticated
+        $service->setConfig([
+            'unauthenticatedRedirect' => null,
+            'queryParam' => null,
+        ]);
+
+        $fields = [
+            'username' => 'email',
+            'password' => 'password',
+        ];
+
+        // Load the authenticators. JWT should be first for API.
+        $service->loadAuthenticator('Authentication.Jwt', [
+            'secretKey' => file_get_contents(CONFIG . 'jwt.pem'),
+            'algorithm' => 'RS256',
+            'returnPayload' => false,
+            'header' => 'Authorization',
+            'queryParam' => 'token',
+        ]);
+
+        $service->loadAuthenticator('Authentication.Form', [
+            'fields' => $fields,
+            'loginUrl' => '/api/v1/users/login',
+        ]);
+
+        // Load identifiers
+        $service->loadIdentifier('Authentication.JwtSubject');
+        $service->loadIdentifier('Authentication.Password', [
+            'fields' => $fields,
+            'resolver' => [
+                'className' => 'Authentication.Orm',
+                'userModel' => 'Users',
+            ],
+        ]);
+
+        return $service;
     }
 }

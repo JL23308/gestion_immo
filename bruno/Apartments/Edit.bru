@@ -1,0 +1,23 @@
+meta {
+  name: Edit
+  type: http
+  seq: 7
+}
+
+patch {
+  url: {{base_url}}/api/v1/apartments/2
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+      "address": "25 Rue de la Paix, 75002 Paris",
+      "rent": 199999999.00
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

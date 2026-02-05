@@ -1,0 +1,11 @@
+meta {
+  name: Delete
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{base_url}}/api/v1/leases/{{lease_id}}
+  body: none
+  auth: inherit
+}

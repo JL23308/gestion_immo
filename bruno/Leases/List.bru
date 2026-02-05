@@ -1,0 +1,29 @@
+meta {
+  name: List
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{base_url}}/api/v1/leases
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Status code is 200", function() {
+    expect(res.status).to.equal(200);
+  });
+  
+  test("Response has success true", function() {
+    expect(res.body.response.success).to.equal(true);
+  });
+  
+  test("Data is an array", function() {
+    expect(res.body.response.data).to.be.an('array');
+  });
+  
+  test("Metadata is present", function() {
+    expect(res.body.metadata).to.be.an('object');
+  });
+}

@@ -1,0 +1,30 @@
+meta {
+  name: Detail
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{base_url}}/api/v1/leases/{{lease_id}}
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("Response is valid", function() {
+    expect([200, 404]).to.include(res.status);
+  });
+  
+  test("Response has correct structure", function() {
+    expect(res.body.response).to.be.an('object');
+    expect(res.body.response.code).to.equal(res.status);
+  });
+  
+  test("If found, lease data is present", function() {
+    if (res.status === 200) {
+      expect(res.body.response.success).to.equal(true);
+      expect(res.body.response.data).to.be.an('object');
+      expect(res.body.response.data.id).to.exist;
+    }
+  });
+}

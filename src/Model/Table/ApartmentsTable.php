@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Model\Table;
 
-use Cake\ORM\Query\SelectQuery;
+use ArrayObject;
+use Cake\Datasource\EntityInterface;
+use Cake\Event\EventInterface;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -41,9 +43,22 @@ class ApartmentsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->getSchema()->setColumnType('booked', 'boolean');
+
         $this->addBehavior('Timestamp', [
-            'created' => 'createdAt',
-            'modified' => 'updatedAt'
+            'created' => 'created_at',
+            'modified' => 'updated_at',
+        ]);
+
+        $this->belongsTo('Landlords', [
+            'className' => 'Users',
+            'foreignKey' => 'landlord_id',
+        ]);
+        $this->hasMany('Leases', [
+            'foreignKey' => 'apartment_id',
+        ]);
+        $this->hasMany('MaintenanceRequests', [
+            'foreignKey' => 'apartment_id',
         ]);
     }
 
@@ -56,51 +71,59 @@ class ApartmentsTable extends Table
     public function validationDefault(Validator $validator): Validator
     {
         $validator
-            ->numeric('rent')
-            ->requirePresence('rent', 'create')
-            ->notEmptyString('rent');
-
-        $validator
             ->scalar('address')
+            ->maxLength('address', 255)
             ->requirePresence('address', 'create')
             ->notEmptyString('address');
 
         $validator
-            ->integer('booked')
-            ->requirePresence('booked', 'create')
-            ->notEmptyString('booked');
+            ->decimal('rent')
+            ->requirePresence('rent', 'create')
+            ->notEmptyString('rent')
+            ->greaterThan('rent', 0);
 
         $validator
-            ->scalar('energyClass')
-            ->requirePresence('energyClass', 'create')
-            ->notEmptyString('energyClass');
-
-        $validator
-            ->integer('nbRooms')
-            ->requirePresence('nbRooms', 'create')
-            ->notEmptyString('nbRooms');
-
-        $validator
-            ->integer('nbBathrooms')
-            ->requirePresence('nbBathrooms', 'create')
-            ->notEmptyString('nbBathrooms');
-
-        $validator
-            ->numeric('size')
+            ->decimal('size')
             ->requirePresence('size', 'create')
-            ->notEmptyString('size');
+            ->notEmptyString('size')
+            ->greaterThan('size', 0);
 
         $validator
-            ->scalar('climatClass')
-            ->allowEmptyString('climatClass');
+            ->integer('nb_rooms')
+            ->requirePresence('nb_rooms', 'create')
+            ->notEmptyString('nb_rooms')
+            ->greaterThan('nb_rooms', 0);
 
         $validator
-            ->scalar('createdAt')
-            ->allowEmptyString('createdAt');
+            ->integer('nb_bathrooms')
+            ->requirePresence('nb_bathrooms', 'create')
+            ->notEmptyString('nb_bathrooms')
+            ->greaterThan('nb_bathrooms', 0);
 
         $validator
-            ->scalar('updatedAt')
-            ->allowEmptyString('updatedAt');
+            ->boolean('booked')
+            ->requirePresence('booked', 'create');
+
+        $validator
+            ->scalar('energy_class')
+            ->maxLength('energy_class', 1)
+            ->requirePresence('energy_class', 'create')
+            ->notEmptyString('energy_class')
+            ->inList('energy_class', ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+
+        $validator
+            ->scalar('climat_class')
+            ->maxLength('climat_class', 1)
+            ->allowEmptyString('climat_class')
+            ->inList('climat_class', ['A', 'B', 'C', 'D', 'E', 'F', 'G']);
+
+        $validator
+            ->scalar('description')
+            ->allowEmptyString('description');
+
+        $validator
+            ->integer('landlord_id')
+            ->allowEmptyString('landlord_id');
 
         return $validator;
     }
@@ -114,16 +137,8 @@ class ApartmentsTable extends Table
      */
     public function buildRules(RulesChecker $rules): RulesChecker
     {
-        $rules->add($rules->isUnique(['id']), ['errorField' => 'id']);
+        $rules->add($rules->existsIn(['landlord_id'], 'Landlords'), ['errorField' => 'landlord_id']);
 
         return $rules;
-    }
-    public function beforeSave(\Cake\Event\EventInterface $event, \Cake\Datasource\EntityInterface $entity, \ArrayObject $options)
-    {
-        if ($entity->isNew() && empty($entity->createdAt)) {
-            $entity->createdAt = date('Y-m-d H:i:s');
-        }
-        
-        $entity->updatedAt = date('Y-m-d H:i:s');
     }
 }

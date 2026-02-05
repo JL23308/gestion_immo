@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Cake\Event\EventInterface;
+use Cake\Http\Response;
 
 /**
  * Error Handling Controller
@@ -32,7 +33,7 @@ class ErrorController extends AppController
      */
     public function initialize(): void
     {
-        // Only add parent::initialize() if you are confident your appcontroller is safe.
+        $this->viewBuilder()->setClassName('Json');
     }
 
     /**
@@ -41,8 +42,9 @@ class ErrorController extends AppController
      * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event Event.
      * @return \Cake\Http\Response|null|void
      */
-    public function beforeFilter(EventInterface $event)
+    public function beforeFilter(EventInterface $event): ?Response
     {
+        return null;
     }
 
     /**
@@ -51,11 +53,13 @@ class ErrorController extends AppController
      * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event Event.
      * @return \Cake\Http\Response|null|void
      */
-    public function beforeRender(EventInterface $event)
+    public function beforeRender(EventInterface $event): ?Response
     {
         parent::beforeRender($event);
 
         $this->viewBuilder()->setTemplatePath('Error');
+
+        return null;
     }
 
     /**
@@ -64,7 +68,8 @@ class ErrorController extends AppController
      * @param \Cake\Event\EventInterface<\Cake\Controller\Controller> $event Event.
      * @return \Cake\Http\Response|null|void
      */
-    public function afterFilter(EventInterface $event)
+    public function afterFilter(EventInterface $event): ?Response
     {
+        return null;
     }
 }

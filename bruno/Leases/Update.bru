@@ -1,0 +1,18 @@
+meta {
+  name: Update
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{base_url}}/api/v1/leases/2
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "status": "terminated",
+    "notes": "Lease terminated early"
+  }
+}

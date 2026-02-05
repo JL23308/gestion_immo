@@ -130,6 +130,30 @@ return [
             'duration' => '+1 years',
             'url' => env('CACHE_CAKEMODEL_URL', null),
         ],
+
+        /*
+         * Custom cache configuration for API data
+         */
+        'api' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_api_',
+            'path' => CACHE . 'api' . DS,
+            'serialize' => true,
+            'duration' => '+15 minutes',
+            'url' => env('CACHE_API_URL', null),
+        ],
+
+        /*
+         * Cache for queries
+         */
+        'queries' => [
+            'className' => FileEngine::class,
+            'prefix' => 'myapp_queries_',
+            'path' => CACHE . 'queries' . DS,
+            'serialize' => true,
+            'duration' => '+10 minutes',
+            'url' => env('CACHE_QUERIES_URL', null),
+        ],
     ],
 
     /*
@@ -171,6 +195,7 @@ return [
      */
     'Error' => [
         'errorLevel' => E_ALL,
+        'exceptionRenderer' => \App\Error\AppExceptionRenderer::class,
         'skipLog' => [],
         'log' => true,
         'trace' => true,

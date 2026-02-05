@@ -1,0 +1,1022 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "SwaggerBake - A MixerAPI Project",
+        "description": "For documentation please review the project [README](https:\/\/github.com\/cnizzardini\/cakephp-swagger-bake) and for\nother great API related packages checkout [MixerAPI](http:\/\/mixerapi.com). To change this text edit your\n`swagger.yaml` file.\n",
+        "license": {
+            "name": "YOUR-LICENSE-HERE"
+        }
+    },
+    "servers": [
+        {
+            "url": "\/"
+        }
+    ],
+    "paths": {
+        "\/api\/v1\/apartments": {
+            "get": {
+                "operationId": "apartments:index:get",
+                "summary": "",
+                "description": "",
+                "tags": [
+                    "Apartments"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "items": {
+                                                "type": "object",
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "#\/components\/schemas\/Apartment"
+                                                    }
+                                                ]
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#\/x-swagger-bake\/components\/schemas\/Generic-Collection"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "apartments:add:post",
+                "summary": "Add method",
+                "description": "",
+                "tags": [
+                    "Apartments"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "required": [
+                                    "address",
+                                    "rent",
+                                    "size",
+                                    "nb_rooms",
+                                    "nb_bathrooms",
+                                    "booked",
+                                    "energy_class"
+                                ],
+                                "allOf": [
+                                    {
+                                        "$ref": "#\/components\/schemas\/Apartment"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Apartment"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/v1\/apartments\/{id}": {
+            "get": {
+                "operationId": "apartments:view:get",
+                "summary": "View method",
+                "description": "",
+                "tags": [
+                    "Apartments"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Apartment"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "When record not found.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Exception"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "apartments:edit:patch",
+                "summary": "Edit method",
+                "description": "",
+                "tags": [
+                    "Apartments"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "required": [
+                                    "address",
+                                    "rent",
+                                    "size",
+                                    "nb_rooms",
+                                    "nb_bathrooms",
+                                    "booked",
+                                    "energy_class"
+                                ],
+                                "allOf": [
+                                    {
+                                        "$ref": "#\/components\/schemas\/Apartment"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Apartment"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "When record not found.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Exception"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "apartments:delete:delete",
+                "summary": "Delete method",
+                "description": "",
+                "tags": [
+                    "Apartments"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Resource deleted"
+                    },
+                    "404": {
+                        "description": "When record not found.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Exception"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/v1\/leases": {
+            "get": {
+                "operationId": "leases:index:get",
+                "summary": "Index method - GET \/api\/v1\/leases.json",
+                "description": "",
+                "tags": [
+                    "Leases"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "items": {
+                                                "type": "object",
+                                                "allOf": [
+                                                    {
+                                                        "$ref": "#\/components\/schemas\/Lease"
+                                                    }
+                                                ]
+                                            },
+                                            "type": "array"
+                                        }
+                                    },
+                                    "allOf": [
+                                        {
+                                            "$ref": "#\/x-swagger-bake\/components\/schemas\/Generic-Collection"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "leases:add:post",
+                "summary": "Add method - POST \/api\/v1\/leases.json",
+                "description": "",
+                "tags": [
+                    "Leases"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "required": [
+                                    "apartment_id",
+                                    "user_id",
+                                    "start_date",
+                                    "deposit",
+                                    "status"
+                                ],
+                                "allOf": [
+                                    {
+                                        "$ref": "#\/components\/schemas\/Lease"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Lease"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/v1\/leases\/{id}": {
+            "get": {
+                "operationId": "leases:view:get",
+                "summary": "View method - GET \/api\/v1\/leases\/{id}.json",
+                "description": "",
+                "tags": [
+                    "Leases"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Lease"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "leases:edit:patch",
+                "summary": "Edit method - PUT\/PATCH \/api\/v1\/leases\/{id}.json",
+                "description": "",
+                "tags": [
+                    "Leases"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "required": [
+                                    "apartment_id",
+                                    "user_id",
+                                    "start_date",
+                                    "deposit",
+                                    "status"
+                                ],
+                                "allOf": [
+                                    {
+                                        "$ref": "#\/components\/schemas\/Lease"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#\/components\/schemas\/Lease"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "leases:delete:delete",
+                "summary": "Delete method - DELETE \/api\/v1\/leases\/{id}.json",
+                "description": "",
+                "tags": [
+                    "Leases"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Resource deleted"
+                    }
+                }
+            }
+        },
+        "\/api\/v1\/users\/login": {
+            "post": {
+                "summary": "User Login",
+                "operationId": "users:login:post",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Login successful with JWT token",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "type": "string"
+                                                },
+                                                "user": {
+                                                    "$ref": "#\/components\/schemas\/User"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "\/api\/v1\/users\/register": {
+            "post": {
+                "summary": "Register User",
+                "operationId": "users:register:post",
+                "tags": [
+                    "Users"
+                ],
+                "requestBody": {
+                    "description": "User registration data",
+                    "required": true,
+                    "content": {
+                        "application\/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User created",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#\/components\/schemas\/User"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [
+        {
+            "BearerAuth": []
+        }
+    ],
+    "definitions": null,
+    "components": {
+        "securitySchemes": {
+            "BearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "Apartment": {
+                "properties": {
+                    "id": {
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "address": {
+                        "minLength": 1,
+                        "maxLength": 255,
+                        "type": "string"
+                    },
+                    "rent": {
+                        "exclusiveMinimum": true,
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "size": {
+                        "exclusiveMinimum": true,
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "nb_rooms": {
+                        "exclusiveMinimum": true,
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "nb_bathrooms": {
+                        "exclusiveMinimum": true,
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "booked": {
+                        "minLength": 1,
+                        "type": "boolean"
+                    },
+                    "energy_class": {
+                        "minLength": 1,
+                        "maxLength": 1,
+                        "type": "string",
+                        "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "E",
+                            "F",
+                            "G"
+                        ]
+                    },
+                    "climat_class": {
+                        "maxLength": 1,
+                        "type": "string",
+                        "enum": [
+                            "A",
+                            "B",
+                            "C",
+                            "D",
+                            "E",
+                            "F",
+                            "G"
+                        ]
+                    },
+                    "description": {
+                        "type": "string",
+                        "format": "string"
+                    },
+                    "landlord_id": {
+                        "type": "integer",
+                        "format": "int64"
+                    }
+                },
+                "type": "object",
+                "description": ""
+            },
+            "Exception": {
+                "properties": {
+                    "code": {
+                        "example": 500,
+                        "type": "integer"
+                    },
+                    "url": {
+                        "example": "\/url\/path",
+                        "type": "string"
+                    },
+                    "message": {
+                        "example": "Internal Error",
+                        "type": "string"
+                    }
+                },
+                "xml": {
+                    "name": "response"
+                },
+                "type": "object"
+            },
+            "Lease": {
+                "properties": {
+                    "id": {
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "apartment_id": {
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "user_id": {
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "start_date": {
+                        "minLength": 1,
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "monthly_rent": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "deposit": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "status": {
+                        "minLength": 1,
+                        "maxLength": 20,
+                        "type": "string",
+                        "enum": [
+                            "active",
+                            "expired",
+                            "terminated",
+                            "pending"
+                        ]
+                    },
+                    "notes": {
+                        "type": "string",
+                        "format": "string"
+                    }
+                },
+                "type": "object",
+                "description": ""
+            },
+            "OperationResult": {
+                "properties": {
+                    "result": {
+                        "type": "boolean"
+                    }
+                },
+                "xml": {
+                    "name": "response"
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "minLength": 1,
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "email": {
+                        "minLength": 1,
+                        "type": "string",
+                        "format": "email"
+                    },
+                    "first_name": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "last_name": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "phone": {
+                        "minLength": 1,
+                        "type": "string"
+                    },
+                    "created": {
+                        "minLength": 1,
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "modified": {
+                        "minLength": 1,
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object",
+                "description": ""
+            }
+        }
+    },
+    "x-swagger-bake": {
+        "components": {
+            "parameters": {
+                "paginatorPage": {
+                    "name": "page",
+                    "in": "query",
+                    "required": false,
+                    "schema": {
+                        "type": "integer"
+                    }
+                },
+                "paginatorLimit": {
+                    "name": "limit",
+                    "in": "query",
+                    "required": false,
+                    "schema": {
+                        "type": "integer"
+                    }
+                },
+                "paginatorSort": {
+                    "name": "sort",
+                    "in": "query",
+                    "required": false,
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                "paginatorDirection": {
+                    "name": "direction",
+                    "in": "query",
+                    "required": false,
+                    "schema": {
+                        "type": "string",
+                        "enum": [
+                            "asc",
+                            "desc"
+                        ]
+                    }
+                }
+            },
+            "schemas": {
+                "HalJson-Item": {
+                    "type": "object",
+                    "properties": {
+                        "links": {
+                            "type": "object",
+                            "properties": {
+                                "self": {
+                                    "type": "object",
+                                    "properties": {
+                                        "href": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "\/entity\/:id"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "HalJson-Collection": {
+                    "type": "object",
+                    "properties": {
+                        "links": {
+                            "type": "object",
+                            "properties": {
+                                "self": {
+                                    "type": "object",
+                                    "properties": {
+                                        "href": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "\/collection"
+                                        }
+                                    }
+                                },
+                                "next": {
+                                    "type": "object",
+                                    "properties": {
+                                        "href": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "\/collection?page=:number"
+                                        }
+                                    }
+                                },
+                                "prev": {
+                                    "type": "object",
+                                    "properties": {
+                                        "href": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "\/collection?page=:number"
+                                        }
+                                    }
+                                },
+                                "first": {
+                                    "type": "object",
+                                    "properties": {
+                                        "href": {
+                                            "type": "string",
+                                            "format": "url",
+                                            "example": "\/collection?page=:number"
+                                        }
+                                    }
+                                },
+                                "properties": {
+                                    "href": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "\/collection?page=:number"
+                                    }
+                                }
+                            },
+                            "last": {
+                                "type": "object",
+                                "properties": {
+                                    "href": {
+                                        "type": "string",
+                                        "format": "url",
+                                        "example": "\/collection?page=:number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "JsonLd-Item": {
+                    "type": "object",
+                    "properties": {
+                        "@id": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "\/entity\/:id"
+                        },
+                        "@type": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "https:\/\/schema.org\/Thing"
+                        },
+                        "@context": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "\/context\/Entity"
+                        }
+                    }
+                },
+                "JsonLd-Collection": {
+                    "type": "object",
+                    "properties": {
+                        "@id": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "\/entity\/:id"
+                        },
+                        "@type": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "https:\/\/schema.org\/Thing"
+                        },
+                        "@context": {
+                            "type": "string",
+                            "format": "url",
+                            "example": "\/context\/Entity"
+                        },
+                        "view": {
+                            "type": "object",
+                            "properties": {
+                                "@id": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index"
+                                },
+                                "@type": {
+                                    "type": "string",
+                                    "example": "PartialCollectionView"
+                                },
+                                "next": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                },
+                                "prev": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                },
+                                "first": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index"
+                                },
+                                "last": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                }
+                            }
+                        }
+                    }
+                },
+                "Generic-Collection": {
+                    "type": "object",
+                    "x-data-element": "data",
+                    "properties": {
+                        "collection": {
+                            "type": "object",
+                            "properties": {
+                                "url": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index"
+                                },
+                                "count": {
+                                    "type": "integer",
+                                    "example": 20
+                                },
+                                "total": {
+                                    "type": "integer",
+                                    "example": 200
+                                },
+                                "pages": {
+                                    "type": "integer",
+                                    "example": 10
+                                },
+                                "next": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                },
+                                "prev": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                },
+                                "first": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index"
+                                },
+                                "last": {
+                                    "type": "string",
+                                    "format": "url",
+                                    "example": "\/index?page=:number"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
